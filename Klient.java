@@ -1,61 +1,63 @@
-package ru.zl.zla;
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by AB on 09.01.2016.
+ * Created by AB on 13.01.2016.
  */
 public class Klient implements Serializable{
-   private String naim;
-  private   int nbrPasport;
+   final static int limitAnim=3;
+    private String naim;
+    private   int nbrPasport;
     private int nbrQueue; //номер в очереди
-    private int quantity;//количество ритомцев
-  private Animal[] animal;
+    private List<Animal>animal=new ArrayList<Animal>(limitAnim);
 
-    public Klient(String naim, int quantity, int nbrPasport) {
+
+    public Klient(String naim, int nbrPasport) {
         this.naim = naim;
-        this.quantity = quantity;
-        this.animal = new Animal[quantity];
         this.nbrPasport = nbrPasport;
-
-
-    }
-
-    public void setNbrQueue(int nbrQueue) {
-        this.nbrQueue = nbrQueue;
-    }
-
-    public void setAnimal(Animal[] animal) {
-        this.animal = animal;
     }
 
     public String getNaim() {
         return naim;
     }
 
+    public void setNaim(String naim) {
+        this.naim = naim;
+    }
+
     public int getNbrPasport() {
         return nbrPasport;
+    }
+
+    public void setNbrPasport(int nbrPasport) {
+        this.nbrPasport = nbrPasport;
     }
 
     public int getNbrQueue() {
         return nbrQueue;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public void setNbrQueue(int nbrQueue) {
+        this.nbrQueue = nbrQueue;
     }
 
-    public Animal[] getAnimal() {
+
+
+    public List<Animal> getAnimal() {
         return animal;
+    }
+
+    public void setAnimal(List<Animal> animal) {
+        this.animal = animal;
     }
 
     @Override
     public String toString() {
-        return
-                "\n{"+nbrQueue+"# Naim-'" + naim + '\'' +
-                ",Pasport-" + nbrPasport +
-                ", Quantity animal-" + quantity +":"+
-                 Arrays.toString(animal) +
+        return "\nKlient"+nbrQueue+"{" +
+                "naim='" + naim + '\'' +
+                ", nbrPasport=" + nbrPasport +
+                ", animal=" + animal +
                 '}';
     }
 }

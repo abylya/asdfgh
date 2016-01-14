@@ -1,153 +1,95 @@
-package ru.zl.zla;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.InputMismatchException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
- * Created by AB on 09.01.2016.
+ * Created by AB on 13.01.2016.
  */
-public class Klinic implements Serializable{
-     static int nbr=5;
-   public Klient[]listClients=new Klient[nbr];
+public class Klinic implements Serializable {
 
-//лечение и удаление из списка
-      public void doctor(){
-          Scanner sc=new Scanner(System.in);
-          System.out.println(Arrays.toString(listClients)+"\n");
-          if(listClients[0]==null){
-              System.out.println("Cpicok pyct");return;
-          }
+    int limitList = 10;
+    List<Klient> listClients = new ArrayList<Klient>(limitList);
 
-          System.out.println("Для выхода нажать (Х) продолжить (Z)" );
-          String s= sc.next();
-          if(s.equals("X")||s.equals("x")){
-              return;
-          }
-          boolean b=true;
-          do {
+    public void doctor() {
 
-              System.out.println("Введите номер пацеента " );
-              String st=sc.next();
-               if (Integer.valueOf(st)>0&&Integer.valueOf(st)<=nbr) {
-                   int n = Integer.valueOf(st) - 1;
-
-                      try{ if (listClients[n] == null) {
-
-                           throw new NullPointerException();
-                       }
-                       for (int i = 0; i < listClients[n].getAnimal().length; i++) {
-
-                           int a = (int) (Math.random() * 2) + 1;
-                           boolean d = ((a == 1) ? true : false);
-                           listClients[n].getAnimal()[i].setHealth(d);
-                           if (d == true) {
-                               System.out.println("Питомец здоров");
-                           } else {
-                               System.out.println("Питомец не излечим");
-                           }
-
-                           listClients[n] = null;
-                         if(n+1==listClients.length) {
-                            return;
-                         }
-                           for (int j = n + 1; listClients[j] != null || listClients.length > j; j++) {//сортировка
-                               if (listClients[j]==null){
-                                   return;
-                               }
-                               listClients[j - 1] = listClients[j];
-                               listClients[j] = null;
-                               listClients[j - 1].setNbrQueue(j);
-                                 if(j+1==listClients.length){
-                                     return;
-                                 }
-                           }
-                           return;
-                       }
-
-                   }catch (NullPointerException e){
-                          System.out.println("Не правильный ввод нет в списке");
-                      }
-
-
-               }else {
-
-                       System.out.println("Не правильный ввод");}
-
-
-          }while (b);
-
-
-      }
-            //удаление из списка сортировка
-    public void removeFromList(){
-        Scanner sc=new Scanner(System.in);
-        System.out.println(Arrays.toString(listClients)+"\n");
-        if(listClients[0]==null){
-            System.out.println("Cpicok pyct");return;
+        if (this.listClients.size() == 0) {
+            System.out.println("Список пуст");    //выходим если список пуст
+            return;
         }
-        boolean b=true;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Ведите номер клиента");
+        boolean b = true;
+        int n = 0;
+
         do {
-            System.out.println("Введите номер пацеента " );
-            String st=sc.next();
-            if (Integer.valueOf(st)>0&&Integer.valueOf(st)<=nbr){
-                int n=Integer.valueOf(st)-1;
-             try {
-                 if (listClients[n] == null) {
-                     throw new NullPointerException();
-                 }
 
-                 if (n+1 == listClients.length) {
-                     listClients[n] = null;
-                     return;
-                 }
+            if (sc.hasNextInt()) {
+                n = sc.nextInt();                                     //лечим если получится
+                if (n < 1 || n > this.listClients.size()) {
+                    System.out.println("Не правильный ввод");
+                } else {
+                    for (int j = 0; j < this.listClients.get(n - 1).getAnimal().size(); j++) {
+                        int a = (int) (Math.random() * 2) + 1;
+                        boolean zd = ((a == 1) ? true : false);
+                        if (zd == true) {
+                            this.listClients.get(n - 1).getAnimal().get(j).setHealth(zd);
+                            this.listClients.get(n - 1).getAnimal().get(j).setNicknaim(this.listClients.get(n - 1).getAnimal().get(j).getNicknaim() + "-Обс-н");
+                            System.out.println("Ваш питомец здоров");
+                        } else {
+                            this.listClients.get(n - 1).getAnimal().get(j).setNicknaim("X");
+                            System.out.println("Ваш питомец не излечим");
+                        }
+                    }
+                    return;
+                }
 
+            } else {
+                sc.next();
+                System.out.println("Не правильный ввод");
+            }
 
-                         listClients[n] = null;
-
-                         for (int j = n + 1; listClients[j]!= null || listClients.length > j; j++) { //сортировка
-                               if (listClients[j]==null){
-                                   return;
-                               }
-                             listClients[j - 1] = listClients[j];
-                             listClients[j] = null;
-                             listClients[j - 1].setNbrQueue(j);
-                             if (j + 1 == listClients.length) {
-                                 return;
-                             }
-                         }
-                         return;
-
-
-
-             }catch (NullPointerException e){System.out.println("Не правильный ввод нет в списке");}
-            }else {
-                System.out.println("Не правильный ввод");}
-
-        }while (b);
-
+        } while (b);
     }
-         //запись в фаил обьекта клиника
-    public void zapicatVfail(Klinic z){
-
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("filecpicok.txt"))) {
 
 
-            oos.writeObject(z);
-
-        } catch (Exception ex) {
-
-            System.out.println(ex.getMessage());
+    /*
+******************************************************
+     */
+    public void removeFromList() {
+        if (this.listClients.size() == 0) {
+            System.out.println("Список пуст");    //выходим если список пуст
+            return;
         }
+        Scanner sc = new Scanner(System.in);
+        System.out.println(this.listClients);
+        boolean b = true;
+        int n = 0;
+        do {
+            System.out.println("Ведите номер клиента");
+
+            if (sc.hasNextInt()) {
+                n = sc.nextInt();
+                if (n < 1 || n > this.listClients.size()) {
+                    System.out.println("Не правильный ввод");
+                } else {
+                    b = false;
+                    break;
+                }
+            } else {
+                sc.next();
+                System.out.println("Не правильный ввод");
+            }
+        } while (b);
+
+        this.listClients.remove(n - 1);
+
+        for (int i = n - 1; i < this.listClients.size(); i++) {      //сортируем и присваеваим номер в очереди
+            this.listClients.get(i).setNbrQueue(i + 1);
+        }
+
     }
-
-
-    @Override
-    public String toString() {
-        return
-              "List klients" + Arrays.toString(listClients) ;
-
-    }
+/*
+**********************************************
+ */
 }

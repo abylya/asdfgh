@@ -1,8 +1,8 @@
-package ru.zl.zla;
 /**
- * Created by AB on 11.01.2016.
+ * Created by AB on 13.01.2016.
  */
 public class Minu {
+
     public static void minu(){
         System.out.println("\t"+"\t"+"Minu"+
 
@@ -14,4 +14,5 @@ public class Minu {
                 "\n 6 Для выхода"+
                 "\nВведите номер операции из меню");
     }
+
 }

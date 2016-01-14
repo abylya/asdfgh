@@ -1,113 +1,122 @@
-package ru.zl.zla;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * Created by AB on 10.01.2016.
+ * Created by AB on 13.01.2016.
  */
 public class Registry {
 
-   // добовление в срисок
-    public void addList(Klinic cp){
-        Scanner sc=new Scanner(System.in);
-    boolean bl=true;
-       do {
-           for (int i=0;i<cp.listClients.length;i++){
+
+    public void scan(Klinic k){
 
 
-             if(cp.listClients[i]==null){
-                 boolean b=true;
-                 String naims;
-                 int nbrP1=0;
-                 int nbrQ2=0;
-                 System.out.println("Для выхода нажать (Х) продолжить запись (Z)" );
-                 String st= sc.next();
-                 if(st.equals("X")||st.equals("x")){
-                     bl=false;break;
-                 }
-                 System.out.println("\nЗапишите имя- "+(i+1)+" клиента");
-                 naims=sc.next();
-
-                 do {
-
-                     System.out.println("Запишите номер паспорта клиента 6 цыфер");
-                     if(sc.hasNextInt()){
-                         nbrP1=sc.nextInt();
-                         if(nbrP1<=99999||nbrP1>999999){
-
-                         }else {
-                             b=false;break;}
-                     }else
-                         sc.next();System.out.println("Не правильный ввод");
-
-                 }while (b);b=true;
-
-                 do {
-                     System.out.println("Запишите количество питомцев не больше 3-х");
-                     if(sc.hasNextInt()){
-                         nbrQ2=sc.nextInt();
-                         if(nbrQ2==0||nbrQ2>3){
-
-                         }else{
-                             b=false;break;}
-                     }else
-                         sc.next();System.out.println("Не правильный ввод");
-
-                 }while (b);b=true;
-
-                 cp.listClients[i]=new Klient(naims,nbrQ2,nbrP1);
-                 cp.listClients[i].setNbrQueue(i+1);
-                 for (int j=0;j<cp.listClients[i].getAnimal().length;j++){
-                     cp.listClients[i].getAnimal()[j]=new Animal();
-                     System.out.println("Запишите вид-"+(j+1)+" питомца" );
-                     String v=sc.next();
-                     cp.listClients[i].getAnimal()[j].setAnimalClass(v);
-                     System.out.println("Запишите кличку-"+(j+1)+" питомца" );
-                     String k=sc.next();
-                     cp.listClients[i].getAnimal()[j].setNicknaim(k);
-                 }
-             }
-           if (i+1==cp.listClients.length){
-               System.out.println("Список полон" );bl=false;break;
-           }
-
-
-         }
-
-        }while (bl);
-    }
-     //поиск клиента
-    //
-    public void scan(Klinic cp){
-        if(cp.listClients[0]==null){
-            System.out.println("Список пуст");
+        if (k.listClients.size()==0){
+            System.out.println("Список пуст");    //выходим если список пуст
             return;
         }
-        Scanner sc=new Scanner(System.in);
-        System.out.println("Введите имя клиента " );
+        System.out.println(k.listClients);
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Ведите имя клиента");
         String nm=sc.next();
-        System.out.println("Введите кличку питомца " );
-        String nn=sc.next();
+        System.out.println("Ведите кличку питомца");
+        String nk=sc.next();
 
-        for (int i=0;i<cp.listClients.length;i++) {
-            if (cp.listClients[i].getNaim().equals(nm)){
-                for (int j=0;j<cp.listClients[i].getAnimal().length;j++){
-                    if(cp.listClients[i].getAnimal()[j].getNicknaim().equals(nn)){
-                        System.out.println(cp.listClients[i].toString());return;
+        for (int i=0;i<k.listClients.size();i++){
+            if(k.listClients.get(i).getNaim().equals(nm)){
+                for (int j=0;j<k.listClients.get(i).getAnimal().size();j++) {
+
+                    if (k.listClients.get(i).getAnimal().get(j).getNicknaim().equals(nk)) {
+                        System.out.println("Есть такой клиент");
+                        System.out.println(k.listClients.get(i).toString());
+                        return;
                     }
-
                 }
             }
-            if(i+1==cp.listClients.length) {
-                System.out.println("Нет такого клиента");return;
+
+        }
+
+        System.out.println("Нет такой клиент");
+    }
+
+    /*
+    ******************************************************
+     */
+    public void addList(Klinic k) {
+
+        Scanner sc = new Scanner(System.in);
+        boolean bl = true;
+        int n = k.listClients.size();
+        int np = 0;
+        do {
+
+            for (int i = n; i < k.limitList; i++) {
+
+                System.out.println("Завершить запись клиентов нажать (Х) продолжить запись (Z)");
+                String st = sc.next();
+                if (st.equals("X") || st.equals("x")) {
+                    bl = false;
+                    break;
+                }
+                System.out.println("\nЗапишите имя- " + (i + 1) + " клиента");
+                String naims = sc.next();
+                boolean b = true;
+                do {
+
+                    System.out.println("Запишите номер паспорта клиента 6 цыфер");
+                    if (sc.hasNextInt()) {
+                        np = sc.nextInt();
+                        if (np <= 99999 || np > 999999) {
+                            System.out.println("Не правильный ввод");
+                        } else {
+                            b = false;
+                            break;
+                        }
+                    } else {
+                        sc.next();
+                        System.out.println("Не правильный ввод");
+                    }
+
+                } while (b);
+                b = true;
+
+
+                k.listClients.add(new Klient(naims, np));
+                k.listClients.get(i).setNbrQueue(i + 1);
+                do {
+                    for (int j = 0; j < Klient.limitAnim; j++) {
+
+                        System.out.println("Ведите вид питомца " + (j + 1));
+                        String v = sc.next();
+                        System.out.println("Ведите кличку питомца" + (j + 1));
+                        String kl = sc.next();
+                        k.listClients.get(i).getAnimal().add(new Animal(v, kl));
+
+                        if (j + 1 == Klient.limitAnim) {
+                            System.out.println("Список питомцев полон");
+                            b = false;
+                            break;
+                        }
+
+                        System.out.println("Завершить запись питомцев нажать (Х) продолжить запись (Z)");
+                        String str = sc.next();
+                        if (str.equals("X") || str.equals("x")) {
+                            b = false;
+                            break;
+                        }
+                    }
+                } while (b);
+                b = true;
+
+                if (i + 1 == k.limitList) {
+                    System.out.println("Список полон");
+                    bl = false;
+                    break;
+                }
+
             }
-            if(cp.listClients[i+1]==null){
-                System.out.println("Нет такого клиента");return;
-            }
 
 
-        }  System.out.println("Нет такого клиента");return;
-
+        } while (bl);
     }
 
 }
